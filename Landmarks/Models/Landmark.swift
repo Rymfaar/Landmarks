@@ -9,11 +9,6 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
-struct Coordinates: Hashable, Codable {
-    var latitude: Double
-    var longitude: Double
-}
-
 struct Landmark: Model, Hashable {
     var id: Int
     var name: String
@@ -21,7 +16,8 @@ struct Landmark: Model, Hashable {
     var state: String
     var description: String
     var isFavorite: Bool
-    
+    var category: Category
+
     private var imageName: String
     var image: Image {
         Image(imageName)
@@ -33,5 +29,18 @@ struct Landmark: Model, Hashable {
             latitude: coordinates.latitude,
             longitude: coordinates.longitude
         )
+    }
+}
+
+extension Landmark {
+    struct Coordinates: Hashable, Codable {
+        var latitude: Double
+        var longitude: Double
+    }
+
+    enum Category: String, CaseIterable, Codable {
+        case lakes = "Lakes"
+        case rivers = "Rivers"
+        case mountains = "Mountains"
     }
 }
