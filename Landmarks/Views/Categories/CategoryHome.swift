@@ -9,15 +9,44 @@ import SwiftUI
 
 struct CategoryHome: View {
     @EnvironmentObject var modelData: ModelData
+    @State private var showingProfile = false
 
     var body: some View {
         NavigationView {
-            List {
+            ScrollView(.vertical) {
+                header
                 ForEach(modelData.categories.keys.sorted(), id: \.self) { key in
-                    Text(key)
+                    CategoryRow(
+                        categoryName: key,
+                        landmarks: modelData.categories[key]!
+                    )
+                    .padding(.vertical, 15)
                 }
             }
+            .listStyle(.inset)
             .navigationTitle("Featured")
+            .toolbar {
+                Button {
+                    showingProfile.toggle()
+                } label: {
+                    Label("User Profile", systemImage: "person.crop.circle")
+                }
+            }
+            .sheet(isPresented: $showingProfile) {
+                ProfileHost()
+                    .environmentObject(modelData)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var header: some View {
+        if let randFavorite = modelData.favorites.randomElement() {
+            randFavorite.image
+                .resizable()
+                .scaledToFill()
+                .frame(height: 200)
+                .clipped()
         }
     }
 }

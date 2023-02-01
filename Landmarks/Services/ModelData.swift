@@ -10,6 +10,7 @@ import Combine
 
 final class ModelData: ObservableObject {
     @Published var landmarks: [Landmark] = load("landmarkData.json")
+    @Published var profile = Profile.default
     var hikes: [Hike] = load("hikeData.json")
 
     var categories: [String: [Landmark]] {
@@ -17,6 +18,10 @@ final class ModelData: ObservableObject {
             grouping: landmarks,
             by: { $0.category.rawValue } 
         )
+    }
+
+    var favorites: [Landmark] {
+        landmarks.filter { $0.isFavorite == true }
     }
 }
 
