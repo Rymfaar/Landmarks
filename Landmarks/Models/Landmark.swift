@@ -22,6 +22,9 @@ struct Landmark: Model, Hashable {
     var image: Image {
         Image(imageName)
     }
+    var favoriteImage: Image? {
+        isFavorite ? Image(imageName) : nil
+    }
     
     private var coordinates: Coordinates
     var locationCoordinates: CLLocationCoordinate2D {

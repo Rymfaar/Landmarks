@@ -8,23 +8,35 @@
 import SwiftUI
 
 struct ProfileHost: View {
-    @Environment(\.editMode) var editMode
     @EnvironmentObject var modelData: ModelData
+    @State private var isEditing = false
     @State private var draftProfile = Profile.default
 
     var body: some View {
-        ScrollView {
-            HStack {
-                Spacer()
-                EditButton()
-            }.padding()
-
-            if editMode?.wrappedValue == .inactive {
-                ProfileSummary(profile: modelData.profile)
-            } else {
-                ProfileEditor(profile: $draftProfile)
+        NavigationView {
+            VStack {
+                if isEditing {
+                    ProfileEditor(profile: $draftProfile)
+                        .onAppear {
+                            draftProfile = modelData.profile
+                        }
+                        .onDisappear{
+                            modelData.profile = draftProfile
+                        }
+                } else {
+                    ProfileSummary(profile: modelData.profile)
+                        .padding()
+                }
             }
-        }.padding()
+            .navigationBarTitle(isEditing ? "Edit Profile" : "Profile", displayMode: .inline)
+            .navigationBarItems(leading: isEditing ? Button("Cancel") {
+                draftProfile = modelData.profile
+                self.isEditing.toggle()
+            } : nil,
+                                trailing: Button(isEditing ? "Done" : "Edit") {
+                self.isEditing.toggle()
+            })
+        }
     }
 }
 

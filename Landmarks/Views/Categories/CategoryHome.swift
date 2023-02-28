@@ -41,12 +41,9 @@ struct CategoryHome: View {
 
     @ViewBuilder
     var header: some View {
-        if let randFavorite = modelData.favorites.randomElement() {
-            randFavorite.image
-                .resizable()
-                .scaledToFill()
-                .frame(height: 200)
-                .clipped()
+        if modelData.favorites != [] {
+            PageView(pages: modelData.favorites.map { FavoriteCard(landmark: $0) })
+                .aspectRatio(3 / 2, contentMode: .fit)
         }
     }
 }
