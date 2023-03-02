@@ -14,6 +14,8 @@ struct CircleImage: View {
         image
             .resizable()
             .clipShape(Circle())
+            .frame(maxWidth: 260, maxHeight: 260)
+            .aspectRatio(1, contentMode: .fit)
             .overlay {
                 Circle().stroke(.white, lineWidth: 4)
             }
